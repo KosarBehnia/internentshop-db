@@ -1,0 +1,1 @@
+http://127.0.0.1:8080/phpmyadmin/tbl_sql.php?db=internetshop&table=w&sql_query=SELECT+%2A%0D%0AFROM+w+%2C+w+as+t%0D%0AWHERE++w.shopID+%3D+t.shopID+AND+w.snum+%3C+t.snum%0D%0AGROUP+BY+w.shopID%0D%0AHAVING+COUNT%28t.snum%29+%3C+2&show_query=1#querybox

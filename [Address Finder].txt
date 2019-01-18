@@ -1,0 +1,48 @@
+/////////////////FIRST Query
+CREATE view w as
+(
+SELECT orderproduct.productID , orders.shopID, sum(orderproduct.num) 
+FROM orderproduct,orders
+WHERE orderproduct.orderID = orders.orderID
+GROUP BY orderproduct.productID , orders.shopID);
+
+///////////////////////////////////
+SELECT w.productID , w.shopID
+FROM w LEFT JOIN w as t
+ON w.shopID = t.shopID AND w.snum < t.snum
+GROUP BY w.productID , w.shopID
+HAVING COUNT(t.snum) < 1
+/////////////////////////////////////////////////////////////////
+SECOND Query
+SELECT customertelephone.customerid, customertelephone.Telephone
+FROM orders JOIN customertelephone
+WHERE customertelephone.customerid = orders.customerid AND orders.status = "denied"
+///////////////////////////////////////////////////////////////////
+THIRD Query
+CREATE view moncust AS
+SELECT orders.customerid,sum(orderproduct.num*product.price) as scust
+FROM orderproduct,orders,product
+WHERE `orders`.`orderID` =  orderproduct.orderid AND
+  orderproduct.productid = product.productID
+ GROUP BY orders.customerid
+ //////////
+ SELECT (SELECT AVG(moncust.scust)
+FROM moncust,customer
+WHERE moncust.customerid = customer.ID AND customer.ID > 20000) - (SELECT AVG(moncust.scust)
+FROM moncust,customer
+WHERE moncust.customerid = customer.ID AND customer.ID < 20000)
+/////////////////////////////////////////////////////////////////////////
+FORTH Query
+SELECT *
+FROM shopdelivery
+WHERE shopdelivery.credit = (SELECT MAX(shopdelivery.credit)
+                             FROM shopdelivery
+                            )
+							
+/////////////////////////////////////////////////////////////////////////
+FIFTH Query
+SELECT *
+FROM shop
+WHERE (shop.FinishTime - shop.StartTime) =
+(SELECT MAX(shop.FinishTime - shop.StartTime)
+FROM shop)
